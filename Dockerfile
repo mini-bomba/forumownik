@@ -8,7 +8,7 @@ WORKDIR /app
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY --parents entrypoint.sh manage.py czesownik config /app/
+COPY --parents entrypoint.sh manage.py forumownik config /app/
 
 EXPOSE 8000
 
