@@ -22,3 +22,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("forumownik.urls")),
 ]
+
+handler404 = "forumownik.views.error.handle404"

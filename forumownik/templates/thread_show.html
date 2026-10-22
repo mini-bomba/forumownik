@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% load forumownik_utils %}
+
+{% block title %}{{ thread.title|truncatechars:32 }}{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'threadview.css' %}" />
+{% endblock %}
+
+{% partialdef comment %}
+<div class="thread-author">
+  <a href="{% url 'user_show' comment.author.id %}">{{ comment.author.username }}</a> commented {{ comment.posted_at|naturaltime }}{% if comment|wasedited %} (edited {{ comment.edited_at|naturaltime }}){% endif %}
+</div>
+<div>
+  {{ comment.body|linebreaks }}
+</div>
+{% if comment.attachment %}
+<a href="{{ comment.attachment.url }}" target="_blank" class="thread-file">
+  <img src="{{ comment.attachment.url }}">
+</a>
+{% endif %}
+<footer class="thread-actions">
+  score: {{ comment.score }}, <a href="{% url 'comment_show' thread.id comment.id %}">focus on comment</a>
+</footer>
+{% endpartialdef comment %}
+
+{% partialdef comment-tree %}
+<article class="comment">
+  {% partial comment %}
+  {% if level|default:1 <= 5 or not comment|hasreplies %}
+    {% for reply in comment|fetchreplies %}
+      {% with comment=reply level=level|default:1|add:1 %}
+        {% partial comment-tree %}
+      {% endwith %}
+    {% endfor %}
+  {% else %}
+    <article class="comment">
+      <a href="{% url 'comment_show' thread.id comment.id %}">[continue this thread...]</a>
+    </article>
+  {% endif %}
+</article>
+{% endpartialdef comment-tree %}
+
+{% block main %}
+<article>
+  <div class="thread-author">
+    <a href="{% url 'user_show' thread.author.id %}">{{ thread.author.username }}</a> posted in <a href="{% url 'category_show' thread.category.id %}">{{ thread.category.name }}</a> {{ thread.posted_at|naturaltime }}{% if thread|wasedited %} (edited {{ thread.edited_at|naturaltime }}){% endif %}
+  </div>
+  <h3>{{ thread.title }}</h3>
+  <div>
+    {{ thread.body|linebreaks }}
+  </div>
+  {% if thread.attachment %}
+  <a href="{{ thread.attachment.url }}" target="_blank" class="thread-file">
+    <img src="{{ thread.attachment.url }}">
+  </a>
+  {% endif %}
+  <footer class="thread-actions">
+    score: {{ thread.score }}, comments: {{ thread.comments }}
+  </footer>
+</article>
+{% if comment %}
+  <div>
+    focused on a comment: <a href="{% url 'thread_show' thread.id %}">go back to thread view</a>
+  </div>
+  {% if comment.reply_to %}
+    <article class="comment">
+      {% with comment=comment.reply_to %}
+        {% partial comment %}
+      {% endwith %}
+  {% endif %}
+  {% partial comment-tree %}
+  {% if comment.reply_to %}
+    </article>
+  {% endif %}
+{% else %}
+  {% for comment in comments %}
+    {% partial comment-tree %}
+  {% endfor %}
+{% endif %}
+{% endblock %}

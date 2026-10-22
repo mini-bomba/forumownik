@@ -8,4 +8,4 @@ class ThreadVote(models.Model):
     pk = models.CompositePrimaryKey("thread", "user")
     thread = models.ForeignKey(Thread, on_delete=models.DB_CASCADE)
     user = models.ForeignKey(User, on_delete=models.DB_CASCADE)
-    is_upvote = models.BooleanField()
+    score = models.IntegerField()

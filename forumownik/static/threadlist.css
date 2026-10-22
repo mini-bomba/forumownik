@@ -1,0 +1,37 @@
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+
+article {
+  background: #eee;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+
+  .thread-text {
+    flex-grow: 1;
+  }
+
+  img {
+    max-height: 10rem;
+    max-width: 10vw;
+    flex-shrink: 1;
+    flex-grow: 1;
+    min-height: 0;
+    min-width: 0;
+  }
+
+  .thread-author,
+  .thread-actions {
+    color: #444;
+    font-size: 0.75rem;
+  }
+
+  h3 {
+    margin: 0.1rem 0;
+  }
+}

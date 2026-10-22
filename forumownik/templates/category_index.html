@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+{% load forumownik_utils %}
+
+{% block title %}Categories{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'threadlist.css' %}" />
+{% endblock %}
+
+{% block main %}
+<h2>Thread categories</h2>
+{% for category in categories %}
+<article>
+  <div class="thread-text">
+    <h3><a href="{% url 'category_show' category.id %}">{{ category.name }}</a></h3>
+    <div>
+      {{ category.description|truncatelines:3|truncatechars:1024|linebreaks }}
+    </div>
+    <footer class="thread-actions">
+      threads: {{ category.threads }}, <a href="{% url 'category_show' category.id %}">show trending</a>
+    </footer>
+  </div>
+</article>
+{% empty %}
+<p>No categories available</p>
+{% endfor %}
+{% endblock %}

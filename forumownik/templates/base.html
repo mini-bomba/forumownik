@@ -1,0 +1,23 @@
+<!doctype html>
+{% load static %}
+<html>
+  <head>
+    <title>{% block title %}{{ page_title }}{% endblock %} - Forumownik</title>
+    <link rel="stylesheet" href="{% static 'index.css' %}" />
+    {% block head %}{% endblock %}
+  </head>
+  <body>
+    <header>
+      <h1 id="title">Forumownik</h1>
+      <ul id="header-nav">
+        <li><a href="{% url 'global_trending' %}">Global trending</a></li>
+        <li><a href="{% url 'category_index' %}">Categories</a></li>
+        <li><a href="#">Log in</a></li>
+      </ul>
+    </header>
+    <main>{% block main %}{% endblock %}</main>
+    <footer>
+      <span>© Konrad Szczepaniak 2026</span>
+    </footer>
+  </body>
+</html>

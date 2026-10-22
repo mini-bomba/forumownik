@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load static %}
+{% load forumownik_utils %}
+
+{% block title %}Not found{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'error.css' %}" />
+{% endblock %}
+
+{% block main %}
+<h2>404 Not found</h2>
+<h3>The requested resource does not exist</h3>
+{% endblock %}

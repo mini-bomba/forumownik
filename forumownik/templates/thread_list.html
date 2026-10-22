@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% load forumownik_utils %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'threadlist.css' %}" />
+{% endblock %}
+
+{% block main %}
+<h2>{{ page_header }}</h2>
+{% for thread in threads %}
+<article>
+  <div class="thread-text">
+    <div class="thread-author">
+      <a href="{% url 'user_show' thread.author.id %}">{{ thread.author.username }}</a> posted in <a href="{% url 'category_show' thread.category.id %}">{{ thread.category.name }}</a> {{ thread.posted_at|naturaltime }}{% if thread|wasedited %} (edited {{ thread.edited_at|naturaltime }}){% endif %}
+    </div>
+    <h3><a href="{% url 'thread_show' thread.id %}">{{ thread.title }}</a></h3>
+    <div>
+      {{ thread.body|truncatelines:3|truncatechars:1024|linebreaks }}
+    </div>
+    <footer class="thread-actions">
+      score: {{ thread.score }}, comments: {{ thread.comments }}, <a href="{% url 'thread_show' thread.id %}">view thread</a>
+    </footer>
+  </div>
+  {% if thread.attachment %}
+  <a href="{{ thread.attachment.url }}" target="_blank" class="thread-file">
+    <img src="{{ thread.attachment.url }}">
+  </a>
+  {% endif %}
+</article>
+{% empty %}
+<p>No posts found</p>
+{% endfor %}
+{% endblock %}
