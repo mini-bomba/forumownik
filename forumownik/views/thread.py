@@ -21,7 +21,7 @@ def show(request, thread_id: int):
     return render(
         request,
         "thread_show.html",
-        {"thread": thread, "comments": root_comments},
+        {"thread": thread, "comments": root_comments, "authuser": request.user},
     )
 
 
@@ -35,4 +35,4 @@ def show_comment(request, thread_id: int, comment_id: int):
     )
     comment = get_object_or_404(qs, id=comment_id, thread_id=thread_id)
 
-    return render(request, "thread_show.html", {"thread": comment.thread, "comment": comment})
+    return render(request, "thread_show.html", {"thread": comment.thread, "comment": comment, "authuser": request.user})

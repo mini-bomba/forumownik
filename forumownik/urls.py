@@ -10,6 +10,7 @@ urlpatterns = [
     path("thread/<int:thread_id>", views.thread.show, name="thread_show"),
     path("thread/<int:thread_id>/<int:comment_id>", views.thread.show_comment, name="comment_show"),
     path("404", views.error.page404, name="404"),
+    path("account/logout", views.account.logout, name="account_logout"),
 ]
 
 handler404 = "forumownik.views.error.page404"

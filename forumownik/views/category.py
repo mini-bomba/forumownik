@@ -6,7 +6,7 @@ from ..models import Category, Thread
 
 def index(request):
     categories = Category.objects.annotate(threads=Count("thread")).order_by("id")
-    return render(request, "category_index.html", {"categories": categories})
+    return render(request, "category_index.html", {"categories": categories, "authuser": request.user})
 
 
 def show(request, category_id: int):
@@ -20,5 +20,5 @@ def show(request, category_id: int):
     return render(
         request,
         "thread_list.html",
-        {"threads": threads, "page_title": category.name, "page_header": f"Trending threads in {category.name}"},
+        {"threads": threads, "page_title": category.name, "page_header": f"Trending threads in {category.name}", "authuser": request.user},
     )

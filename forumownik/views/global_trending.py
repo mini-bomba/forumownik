@@ -11,5 +11,5 @@ def index(request):
         .order_by("-posted_at")
     )
     return render(
-        request, "thread_list.html", {"threads": threads, "page_title": "Global trending", "page_header": "Trending threads"}
+        request, "thread_list.html", {"threads": threads, "page_title": "Global trending", "page_header": "Trending threads", "authuser": request.user}
     )

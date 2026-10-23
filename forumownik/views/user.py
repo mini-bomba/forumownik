@@ -16,5 +16,5 @@ def show(request, user_id: int):
     return render(
         request,
         "thread_list.html",
-        {"threads": threads, "page_title": user.username, "page_header": f"Latest posts by {user.username}"},
+        {"threads": threads, "page_title": user.username, "page_header": f"Latest posts by {user.username}", "authuser": request.user},
     )

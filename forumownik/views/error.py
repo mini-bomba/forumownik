@@ -6,4 +6,4 @@ def handle404(request, exception=None):
 
 
 def page404(request):
-    return render(request, "404.html", status=404)
+    return render(request, "404.html", {"authuser": request.user}, status=404)

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% load forumownik_utils %}
+
+{% block title %}Login{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block main %}
+<form method="POST">
+  <h2>Log in to Forumownik</h2>
+  <input type="text" name="username" placeholder="username">
+  <input type="password" name="password" placeholder="password">
+</form>
+{% endblock %}
