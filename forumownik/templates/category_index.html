@@ -18,7 +18,7 @@
       {{ category.description|truncatelines:3|truncatechars:1024|linebreaks }}
     </div>
     <footer class="thread-actions">
-      threads: {{ category.threads }}, <a href="{% url 'category_show' category.id %}">show trending</a>
+      threads: {{ category.threads }}, <a href="{% url 'category_show' category.id %}">show trending</a>, <a href="{% url 'thread_create' category_id=category.id %}">create new thread</a>
     </footer>
   </div>
 </article>

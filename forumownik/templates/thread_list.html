@@ -1,14 +1,5 @@
-{% extends "base.html" %}
-{% load static %}
 {% load humanize %}
 {% load forumownik_utils %}
-
-{% block head %}
-<link rel="stylesheet" href="{% static 'threadlist.css' %}" />
-{% endblock %}
-
-{% block main %}
-<h2>{{ page_header }}</h2>
 {% for thread in threads %}
 <article>
   <div class="thread-text">
@@ -32,4 +23,3 @@
 {% empty %}
 <p>No posts found</p>
 {% endfor %}
-{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}New thread{% endblock %}
+
+{% block head %}
+<!-- <link rel="stylesheet" href="{% static 'form.css' %}" /> -->
+<link rel="stylesheet" href="{% static 'threadlist.css' %}" />
+{% endblock %}
+
+{% block main %}
+<article>
+  <div class="thread-text">
+    <h2>Category: {{ category.name }}</h2>
+    <div>
+      {{ category.description|linebreaks }}
+    </div>
+    <footer class="thread-actions">
+      threads: {{ category.threads }}
+    </footer>
+  </div>
+</article>
+<form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  <h2>New thread</h2>
+  <div class="form">
+    {{ form }}
+  </div>
+  <button type="submit">Create thread</button>
+</form>
+{% endblock %}

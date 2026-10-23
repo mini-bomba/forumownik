@@ -13,7 +13,7 @@
         <li><a href="{% url 'global_trending' %}">Global trending</a></li>
         <li><a href="{% url 'category_index' %}">Categories</a></li>
         {% if authuser is None or not authuser.is_authenticated %}
-        <li id="nav-user"><a href="#">Log in</a></li>
+        <li id="nav-user"><a href="{% url 'account_login' %}">Log in</a></li>
         {% else %}
         <li id="nav-user">Welcome, {{ authuser.username }} - <a href="{% url 'account_logout' %}">Log out</a></li>
         {% endif %}

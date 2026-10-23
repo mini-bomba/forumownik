@@ -154,3 +154,7 @@ STORAGES = {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
+
+LOGIN_URL = "account_login"
+LOGIN_REDIRECT_URL = "global_trending"
+LOGOUT_REDIRECT_URL = "global_trending"

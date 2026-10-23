@@ -11,6 +11,10 @@ urlpatterns = [
     path("thread/<int:thread_id>/<int:comment_id>", views.thread.show_comment, name="comment_show"),
     path("404", views.error.page404, name="404"),
     path("account/logout", views.account.logout, name="account_logout"),
+    path("account/login", views.account.login, name="account_login"),
+    path("category/<int:category_id>/new_thread", views.thread.create_thread, name="thread_create"),
+    path("thread/<int:thread_id>/reply", views.thread.create_root_comment, name="comment_create"),
+    path("thread/<int:thread_id>/<int:comment_id>/reply", views.thread.create_reply_comment, name="comment_reply"),
 ]
 
 handler404 = "forumownik.views.error.page404"

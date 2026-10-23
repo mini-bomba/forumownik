@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ user.username }}{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'threadlist.css' %}" />
+{% endblock %}
+
+{% block main %}
+<h3>Threads by {{ user.username }}</h3>
+{% include 'thread_list.html' %}
+{% endblock %}

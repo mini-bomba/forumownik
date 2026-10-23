@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'threadlist.css' %}" />
+{% endblock %}
+
+{% block main %}
+<h2>{{ page_header }}</h2>
+{% include 'thread_list.html' %}
+{% endblock %}

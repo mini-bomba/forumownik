@@ -10,7 +10,8 @@ def index(request):
 
 
 def show(request, category_id: int):
-    category = get_object_or_404(Category, id=category_id)
+    c_qs = Category.objects.annotate(threads=Count("thread"))
+    category = get_object_or_404(c_qs, id=category_id)
     threads = (
         Thread.objects.filter(category=category_id)
         .annotate(score=Sum("threadvote__score", default=0), comments=Count("comment"))
@@ -19,6 +20,12 @@ def show(request, category_id: int):
     )
     return render(
         request,
-        "thread_list.html",
-        {"threads": threads, "page_title": category.name, "page_header": f"Trending threads in {category.name}", "authuser": request.user},
+        "category_show.html",
+        {
+            "category": category,
+            "threads": threads,
+            "page_title": category.name,
+            "page_header": f"Trending threads in {category.name}",
+            "authuser": request.user,
+        },
     )

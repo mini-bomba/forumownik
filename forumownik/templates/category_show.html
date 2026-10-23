@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'threadlist.css' %}" />
+{% endblock %}
+
+{% block main %}
+<article>
+  <div class="thread-text">
+    <h2>Category: {{ category.name }}</h2>
+    <div>
+      {{ category.description|linebreaks }}
+    </div>
+    <footer class="thread-actions">
+      threads: {{ category.threads }}, <a href="{% url 'thread_create' category_id=category.id %}">create new thread</a>
+    </footer>
+  </div>
+</article>
+<h3>Trending threads</h3>
+{% include 'thread_list.html' %}
+{% endblock %}

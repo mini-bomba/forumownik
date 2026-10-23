@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% load forumownik_utils %}
+
+{% block title %}New comment{% endblock %}
+
+{% block head %}
+<!-- <link rel="stylesheet" href="{% static 'form.css' %}" /> -->
+<link rel="stylesheet" href="{% static 'threadview.css' %}" />
+{% endblock %}
+
+{% block main %}
+<article>
+  <div class="thread-author">
+    <a href="{% url 'user_show' thread.author.id %}">{{ thread.author.username }}</a> posted in <a href="{% url 'category_show' thread.category.id %}">{{ thread.category.name }}</a> {{ thread.posted_at|naturaltime }}{% if thread|wasedited %} (edited {{ thread.edited_at|naturaltime }}){% endif %}
+  </div>
+  <h3>{{ thread.title }}</h3>
+  <div>
+    {{ thread.body|linebreaks }}
+  </div>
+  {% if thread.attachment %}
+  <a href="{{ thread.attachment.url }}" target="_blank" class="thread-file">
+    <img src="{{ thread.attachment.url }}">
+  </a>
+  {% endif %}
+  <footer class="thread-actions">
+    score: {{ thread.score }}, comments: {{ thread.comments }}
+  </footer>
+</article>
+{% if comment %}
+<article class="comment">
+  <div class="thread-author">
+    <a href="{% url 'user_show' comment.author.id %}">{{ comment.author.username }}</a> commented {{ comment.posted_at|naturaltime }}{% if comment|wasedited %} (edited {{ comment.edited_at|naturaltime }}){% endif %}
+  </div>
+  <div>
+    {{ comment.body|linebreaks }}
+  </div>
+  {% if comment.attachment %}
+  <a href="{{ comment.attachment.url }}" target="_blank" class="thread-file">
+    <img src="{{ comment.attachment.url }}">
+  </a>
+  {% endif %}
+  <footer class="thread-actions">
+    score: {{ comment.score }}, <a href="{% url 'comment_show' thread.id comment.id %}">focus on comment</a>
+  </footer>
+</article>
+{% endif %}
+<form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  <h2>New comment</h2>
+  <div class="form">
+    {{ form }}
+  </div>
+  <button type="submit">Create comment</button>
+</form>
+{% endblock %}

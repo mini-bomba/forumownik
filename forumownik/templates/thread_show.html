@@ -22,7 +22,7 @@
 </a>
 {% endif %}
 <footer class="thread-actions">
-  score: {{ comment.score }}, <a href="{% url 'comment_show' thread.id comment.id %}">focus on comment</a>
+  score: {{ comment.score }}, <a href="{% url 'comment_show' thread.id comment.id %}">focus on comment</a>, <a href="{% url 'comment_reply' thread.id comment.id %}">reply</a>
 </footer>
 {% endpartialdef comment %}
 
@@ -58,7 +58,7 @@
   </a>
   {% endif %}
   <footer class="thread-actions">
-    score: {{ thread.score }}, comments: {{ thread.comments }}
+    score: {{ thread.score }}, comments: {{ thread.comments }}, <a href="{% url 'comment_create' thread_id=thread.id %}">reply</a>
   </footer>
 </article>
 {% if comment %}
