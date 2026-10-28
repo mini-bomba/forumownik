@@ -30,4 +30,4 @@ def login(request: HttpRequest) -> HttpResponse:
         return render(request, "login.html", {"authuser": request.user, "form": form}, status=400)
 
     auth.login(request, user)
-    return redirect("global_trending")
+    return redirect(request.GET.get("next", "global_trending"))
