@@ -25,7 +25,7 @@ def show(request, thread_id: int):
 
     # comments need to be formatted into a tree
     root_comments = (
-        Comment.objects.filter(reply_to=None)
+        Comment.objects.filter(reply_to=None, thread_id=thread_id)
         .annotate(score=Sum("commentvote__score", default=0))
         .prefetch_related("author")
         .order_by("posted_at")
