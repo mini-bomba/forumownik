@@ -26,10 +26,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ["DJANGO_MODE"] != "production"
+DEBUG = os.environ.get("DJANGO_MODE") != "production"
 
 ALLOWED_HOSTS = json.loads(os.environ.get("DJANGO_HOSTS", "[]"))
 
@@ -84,7 +84,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": os.environ.get("DB_NAME", "forumownik"),
         "USER": os.environ.get("DB_USER", "forumownik"),
-        "PASSWORD": os.environ["DB_PASSWORD"],
+        "PASSWORD": os.environ.get("DB_PASSWORD"),
         "HOST": os.environ.get("DB_HOST", "localhost"),
         "PORT": os.environ.get("DB_PORT", "5432"),
     }
@@ -126,6 +126,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 
 # Email
@@ -143,10 +144,10 @@ STORAGES = {
     "default": {
         "BACKEND": "storages.backends.s3.S3Storage",
         "OPTIONS": {
-            "bucket_name": os.environ["S3_BUCKET"],
-            "access_key": os.environ["S3_ACCESS_KEY"],
-            "secret_key": os.environ["S3_SECRET_KEY"],
-            "region_name": os.environ["S3_REGION"],
+            "bucket_name": os.environ.get("S3_BUCKET"),
+            "access_key": os.environ.get("S3_ACCESS_KEY"),
+            "secret_key": os.environ.get("S3_SECRET_KEY"),
+            "region_name": os.environ.get("S3_REGION"),
             "endpoint_url": os.environ.get("S3_ENDPOINT"),
         },
     },

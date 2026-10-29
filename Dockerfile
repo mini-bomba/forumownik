@@ -1,15 +1,25 @@
-FROM docker.io/library/python:3.15-alpine
-
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
+FROM docker.io/library/alpine:latest
 
 WORKDIR /app
+RUN apk add --no-cache nginx supervisor uwsgi uwsgi-python3 python3 \
+ && ln -s /usr/bin/python3 /usr/local/bin/python \
+ && addgroup -g 1000 forumownik \
+ && adduser -u 1000 -G forumownik -D -H forumownik
 
 COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
+RUN python -m venv venv \
+ && source venv/bin/activate \
+ && pip install --no-cache-dir -r requirements.txt
 
-COPY --parents entrypoint.sh manage.py forumownik config /app/
+COPY --parents manage.py forumownik config /app/
+RUN source venv/bin/activate \
+ && ./manage.py collectstatic
 
-EXPOSE 8000
+COPY docker/start-django.sh /start-django.sh
+COPY docker/supervisord.conf /etc/supervisord.conf
+COPY docker/uwsgi.ini /etc/uwsgi.ini
+COPY docker/nginx.conf /etc/nginx/http.d/default.conf
 
-ENTRYPOINT ["/app/entrypoint.sh"]
+EXPOSE 80
+
+ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
