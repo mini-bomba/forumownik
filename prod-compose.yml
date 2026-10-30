@@ -18,7 +18,8 @@ services:
   migrate:
     build: .
     entrypoint:
-      - /migrate.sh
+      - /django.sh
+      - migrate
     restart: no
     volumes:
       - ./.env:/app/.env:ro

@@ -18,7 +18,7 @@ RUN source venv/bin/activate \
 COPY docker/supervisord.conf /etc/supervisord.conf
 COPY docker/uwsgi.ini /etc/uwsgi.ini
 COPY docker/nginx.conf /etc/nginx/http.d/default.conf
-COPY docker/migrate.sh /migrate.sh
+COPY docker/django.sh /django.sh
 
 EXPOSE 80
 
