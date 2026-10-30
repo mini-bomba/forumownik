@@ -35,8 +35,6 @@ services:
       DB_PORT: 5432
     volumes:
       - ./.env:/app/.env:ro
-    ports:
-      - "8080:80"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.forumownik.rule=Host(`${DJANGO_HOST}`)"

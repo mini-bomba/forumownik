@@ -22,3 +22,7 @@ klon reddita (bardzo kreatywny projekt)
 
 2. przygotuj `.env` według szablonu
 3. `docker compose -f prod-compose.yml up -d --build`
+
+### skalowanie
+
+`docker compose -f prod-compose.yml scale app=<liczba instancji aplikacji>`
