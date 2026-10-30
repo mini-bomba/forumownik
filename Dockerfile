@@ -15,10 +15,10 @@ COPY --parents manage.py forumownik config /app/
 RUN source venv/bin/activate \
  && ./manage.py collectstatic
 
-COPY docker/start-django.sh /start-django.sh
 COPY docker/supervisord.conf /etc/supervisord.conf
 COPY docker/uwsgi.ini /etc/uwsgi.ini
 COPY docker/nginx.conf /etc/nginx/http.d/default.conf
+COPY docker/migrate.sh /migrate.sh
 
 EXPOSE 80
 

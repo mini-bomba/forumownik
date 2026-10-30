@@ -1,0 +1,48 @@
+# NOTE: this is a dev-only compose, will not be used production
+services:
+  db:
+    image: docker.io/library/postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${DB_USER}", "-d", "${DB_NAME}"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+
+  migrate:
+    build: .
+    entrypoint:
+      - /migrate.sh
+    restart: no
+    volumes:
+      - ./.env:/app/.env:ro
+    depends_on:
+      db:
+        condition: service_healthy
+
+  app:
+    build: .
+    restart: unless-stopped
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+    volumes:
+      - ./.env:/app/.env:ro
+    ports:
+      - "8080:80"
+    labels:
+      - "traefik.http.routers.forumownik.rule=Host(`${DJANGO_HOST}`)"
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+
+volumes:
+  pgdata:
