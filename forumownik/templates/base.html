@@ -15,7 +15,10 @@
         {% if authuser is None or not authuser.is_authenticated %}
         <li id="nav-user"><a href="{% url 'account_login' %}">Log in</a></li>
         {% else %}
-        <li id="nav-user">Welcome, {{ authuser.username }} - <a href="{% url 'account_logout' %}">Log out</a></li>
+        <form method="POST" action="{% url 'account_logout' %}">
+          {% csrf_token %}
+          <li id="nav-user">Welcome, {{ authuser.username }} - <button type="submit">Log out</button></li>
+        </form>
         {% endif %}
       </ul>
     </header>

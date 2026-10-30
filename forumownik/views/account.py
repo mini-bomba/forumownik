@@ -7,6 +7,8 @@ from ..forms.account import LoginForm
 
 
 def logout(request: HttpRequest) -> HttpResponse:
+    if request.method != "POST":
+        raise BadRequest
     auth.logout(request)
     return redirect("global_trending")
 
