@@ -14,7 +14,7 @@ klon reddita (bardzo kreatywny projekt)
 
 ## środowisko produkcyjne
 
-1. system powinien mieć zainstalowanego dockera z wtyczką docker compose oraz traefik jako reverse proxy
+1. system powinien mieć zainstalowanego dockera z wtyczką docker compose i buildx oraz traefik jako reverse proxy
 
    compose zakłada, że skonfigurowany jest endpoint `http`.
    traefik w tym deploy nie zajmuje się szyfrowaniem ruchu, zamiast tego otrzymuje ruch odszyfrowany

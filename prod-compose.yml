@@ -37,6 +37,7 @@ services:
     ports:
       - "8080:80"
     labels:
+      - "traefik.enable=true"
       - "traefik.http.routers.forumownik.rule=Host(`${DJANGO_HOST}`)"
     depends_on:
       db:
