@@ -15,6 +15,7 @@ urlpatterns = [
     path("category/<int:category_id>/new_thread", views.thread.create_thread, name="thread_create"),
     path("thread/<int:thread_id>/reply", views.thread.create_root_comment, name="comment_create"),
     path("thread/<int:thread_id>/<int:comment_id>/reply", views.thread.create_reply_comment, name="comment_reply"),
+    path("hostname", views.debug.get_hostname, name="hostname"),
 ]
 
 handler404 = "forumownik.views.error.page404"

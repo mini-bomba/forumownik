@@ -1,3 +1,3 @@
-from . import account, category, error, global_trending, thread, user
+from . import account, category, debug, error, global_trending, thread, user
 
-__all__ = ["account", "category", "error", "global_trending", "thread", "user"]
+__all__ = ["account", "category", "debug", "error", "global_trending", "thread", "user"]
