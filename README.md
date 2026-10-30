@@ -21,4 +21,4 @@ klon reddita (bardzo kreatywny projekt)
    od innego, zewnętrznego reverse proxy (w moim przypadku nginx)
 
 2. przygotuj `.env` według szablonu
-3. `docker compose -f prod-compose.yml up -d`
+3. `docker compose -f prod-compose.yml up -d --build`

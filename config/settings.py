@@ -32,6 +32,9 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 DEBUG = os.environ.get("DJANGO_MODE") != "production"
 
 ALLOWED_HOSTS = [os.environ.get("DJANGO_HOST", "localhost")]
+CSRF_TRUSTED_ORIGINS = [f'https://{os.environ.get("DJANGO_HOST", "localhost")}']
+CSRF_ALLOWED_ORIGINS = [f'https://{os.environ.get("DJANGO_HOST", "localhost")}']
+CORS_ORIGINS_WHITELIST = [f'https://{os.environ.get("DJANGO_HOST", "localhost")}']
 
 # Application definition
 
