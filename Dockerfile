@@ -1,7 +1,7 @@
 FROM docker.io/library/alpine:latest
 
 WORKDIR /app
-RUN apk add --no-cache nginx supervisor uwsgi uwsgi-python3 python3 \
+RUN apk add --no-cache curl nginx supervisor uwsgi uwsgi-python3 python3 \
  && ln -s /usr/bin/python3 /usr/local/bin/python \
  && addgroup -g 1000 forumownik \
  && adduser -u 1000 -G forumownik -D -H forumownik
