@@ -29,7 +29,7 @@ services:
 
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.forumownik.rule=Host(`doco.ovh1.minibomba.pro`)"
+      - "traefik.http.routers.doco.rule=Host(`doco.ovh1.minibomba.pro`)"
 
     # The health gate decides whether the new version is kept. Without a
     # healthcheck doco-cd falls back to running `doco-cd healthcheck` inside
