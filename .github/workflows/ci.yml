@@ -48,7 +48,7 @@ jobs:
           # create envfile
           echo "$ENVFILE" > .env
           # start from compose
-          docker compose -f prod-compose.yml up
+          docker compose -f prod-compose.yml up -d
           # let it spin up
           sleep 5
           # check status
