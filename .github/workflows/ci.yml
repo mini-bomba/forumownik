@@ -1,0 +1,102 @@
+name: CI/CD
+
+on:
+  push:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  checks:
+    name: Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Perform the checks
+        env:
+          ENVFILE: ${{ secrets.ENVFILE }}
+        run: |
+          # create envfile
+          echo "$ENVFILE" > .env
+          # install deps
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+          # check for migrations
+          ./manage.py check forumownik
+          ./manage.py makemigrations --check forumownik
+
+  build-docker:
+    name: Build docker image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Attempt to build the image
+        run: |
+          docker build -t ghcr.io/mini-bomba/forumownik:latest .
+          docker image save ghcr.io/mini-bomba/forumownik:latest | zstd > docker-image.tar.zst
+
+      - name: Quick image test
+        env:
+          ENVFILE: ${{ secrets.ENVFILE }}
+        run: |
+          # create envfile
+          echo "$ENVFILE" > .env
+          # start from compose
+          docker compose -f prod-compose.yml up
+          # let it spin up
+          sleep 5
+          # check status
+          FAILS=0
+          while true
+          do
+            # if there's at least one app container and no unhealthy ones
+            if [[ "`docker ps -a --filter "name=forumownik-app" | wc -l`" -gt 1 && "`docker ps -a --filter "name=forumownik-app" | grep -v "healthy" | wc -l`" -eq 1 ]]
+            then
+              break
+            fi
+            FAILS=$(($FAILS + 1))
+            if [[ "$FAILS" -ge 5 ]]
+            then
+              exit 1
+            fi
+            sleep 5
+          done
+
+      - name: Upload image as artifact
+        uses: actions/upload-artifact@v7
+        id: upload
+        with:
+          name: docker-image
+          path: docker-image.tar.zst
+          if-no-files-found: error
+          archive: false
+    outputs:
+      artifact: ${{ steps.upload.outputs.artifact-id }}
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: [checks, build-docker]
+    if: ${{ success() && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    permissions:
+      packages: write
+    steps:
+      - name: Download the docker image
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: ${{ needs.build-docker.outputs.artifact }}
+          skip-decompress: true
+      - name: Authenticate with ghcr.io
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          USER: ${{ github.actor }}
+        run: echo "$GITHUB_TOKEN" | docker login ghcr.io -u "$USER" --password-stdin
+      - name: Import image and publish
+        run: |
+          docker image load -i docker-image.tar.zst
+          docker image push ghcr.io/mini-bomba/forumownik:latest
