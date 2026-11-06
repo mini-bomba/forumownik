@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.27
 FROM docker.io/library/alpine:latest
 
 WORKDIR /app
