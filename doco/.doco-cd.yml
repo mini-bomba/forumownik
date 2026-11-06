@@ -1,0 +1,9 @@
+name: doco-cd
+working_dir: doco-cd
+compose_files: [compose.yaml]
+timeout: 120
+
+---
+name: forumownik
+working_dir: forumownik
+compose_files: [compose.yaml]
