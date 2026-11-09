@@ -10,7 +10,7 @@ services:
     # Reach the API through a reverse proxy on this network.
 
     environment:
-      TZ: Europe/Warswap
+      TZ: Europe/Warsaw
       SELF_UPDATE_ENABLED: "true"
       SELF_UPDATE_STRATEGY: auto
       DEPLOY_CONFIG_BASE_DIR: "doco"
