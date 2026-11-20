@@ -99,6 +99,8 @@ jobs:
         run: |
           zstd -d docker-image.tar.zst
           ./trivy image --severity HIGH,CRITICAL ghcr.io/mini-bomba/forumownik:latest --format json -o trivy.json --input docker-image.tar
+          # spam out warnings
+          jq -r '.Results.[].Vulnerabilities | select(. != null) | flatten | map("::warning::" + .Severity + ", " + .PkgID + ": " + .Title + " (fixed in " + .FixedVersion + ")").[]' trivy.json
 
       - name: Upload scan results
         uses: actions/upload-artifact@v7
