@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - name: Perform the checks
         env:
@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - name: Attempt to build the image
         run: |
@@ -69,7 +69,7 @@ jobs:
           done
 
       - name: Upload image as artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         id: upload
         with:
           name: docker-image
@@ -86,7 +86,7 @@ jobs:
       - name: Install semgrep
         run: pip install semgrep
       - name: Clone repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           fetch-depth: 0
       - name: Semgrep scan
@@ -103,7 +103,7 @@ jobs:
           tar -xf trivy.tar.gz
 
       - name: Download the docker image
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
         with:
           artifact-ids: ${{ needs.build-docker.outputs.artifact }}
           skip-decompress: true
@@ -116,7 +116,7 @@ jobs:
           jq -r '.Results.[].Vulnerabilities | select(. != null) | flatten | map("::warning::" + .Severity + ", " + .PkgID + ": " + .Title + " (fixed in " + .FixedVersion + ")").[]' trivy.json
 
       - name: Upload scan results
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         if: always()
         with:
           name: trivy-results
@@ -132,7 +132,7 @@ jobs:
       packages: write
     steps:
       - name: Download the docker image
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
         with:
           artifact-ids: ${{ needs.build-docker.outputs.artifact }}
           skip-decompress: true
