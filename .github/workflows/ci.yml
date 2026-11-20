@@ -157,9 +157,6 @@ jobs:
           fetch-depth: 0
           path: forumownik
 
-      - name: Create test network
-        run: docker network create test-net
-
       - name: Import docker image
         run: docker image load -i docker-image.tar.zst
 
@@ -199,7 +196,7 @@ jobs:
             --rm \
             -h nikto \
             --name nikto \
-            --network test-net \
+            --network forumownik_default \
             -v $PWD/output:/output \
             ghcr.io/sullo/nikto:latest \
             -h http://app:80 \
