@@ -218,6 +218,7 @@ jobs:
     if: ${{ success() && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     permissions:
       packages: write
+      id-token: write
     steps:
       - name: Download the docker image
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
@@ -240,11 +241,11 @@ jobs:
           SIGSTORE_ID_TOKEN: ${{ github.token }}
         run: |
           docker image load -i docker-image.tar.zst
+          DIGEST="`docker image inspect ghcr.io/mini-bomba/forumownik:latest --format "{{ .Id }}"`"
           docker image tag $IMAGE_NAME:latest $IMAGE_NAME:$SHA
           docker image push $IMAGE_NAME:latest
           docker image push $IMAGE_NAME:$SHA
-          cosign sign $IMAGE_NAME:latest
-          cosign sign $IMAGE_NAME:$SHA
+          cosign sign $IMAGE_NAME@$DIGEST
 
   deploy:
     runs-on: ubuntu-latest
