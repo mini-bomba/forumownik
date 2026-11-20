@@ -22,5 +22,5 @@ COPY docker/nginx.conf /etc/nginx/http.d/default.conf
 COPY docker/django.sh /django.sh
 
 EXPOSE 80
-
+USER 0:0
 ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
