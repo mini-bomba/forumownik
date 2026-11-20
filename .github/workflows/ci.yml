@@ -229,6 +229,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           USER: ${{ github.actor }}
         run: echo "$GITHUB_TOKEN" | docker login ghcr.io -u "$USER" --password-stdin
+
+      - name: Install cosign
+        run: sudo apt install cosign
+
       - name: Import image and publish
         env:
           SHA: ${{ github.sha }}
