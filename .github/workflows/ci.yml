@@ -244,7 +244,7 @@ jobs:
           docker image tag $IMAGE_NAME:latest $IMAGE_NAME:$SHA
           docker image push $IMAGE_NAME:latest
           docker image push $IMAGE_NAME:$SHA
-          cosign sign $IMAGE_NAME@$DIGEST
+          cosign sign --yes $IMAGE_NAME@$DIGEST
 
   deploy:
     runs-on: ubuntu-latest
