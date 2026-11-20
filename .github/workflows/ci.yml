@@ -238,7 +238,6 @@ jobs:
         env:
           SHA: ${{ github.sha }}
           IMAGE_NAME: ghcr.io/mini-bomba/forumownik
-          SIGSTORE_ID_TOKEN: ${{ github.token }}
         run: |
           docker image load -i docker-image.tar.zst
           DIGEST="`docker image inspect ghcr.io/mini-bomba/forumownik:latest --format "{{ .Id }}"`"
