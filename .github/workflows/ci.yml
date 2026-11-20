@@ -230,9 +230,17 @@ jobs:
           USER: ${{ github.actor }}
         run: echo "$GITHUB_TOKEN" | docker login ghcr.io -u "$USER" --password-stdin
       - name: Import image and publish
+        env:
+          SHA: ${{ github.sha }}
+          IMAGE_NAME: ghcr.io/mini-bomba/forumownik
+          SIGSTORE_ID_TOKEN: ${{ github.token }}
         run: |
           docker image load -i docker-image.tar.zst
-          docker image push ghcr.io/mini-bomba/forumownik:latest
+          docker image tag $IMAGE_NAME:latest $IMAGE_NAME:$SHA
+          docker image push $IMAGE_NAME:latest
+          docker image push $IMAGE_NAME:$SHA
+          cosign sign $IMAGE_NAME:latest
+          cosign sign $IMAGE_NAME:$SHA
 
   deploy:
     runs-on: ubuntu-latest
