@@ -2,6 +2,7 @@ from django.contrib import auth
 from django.core.exceptions import BadRequest
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
+from django.utils.http import url_has_allowed_host_and_scheme
 
 from ..forms.account import LoginForm
 
@@ -32,4 +33,9 @@ def login(request: HttpRequest) -> HttpResponse:
         return render(request, "login.html", {"authuser": request.user, "form": form}, status=400)
 
     auth.login(request, user)
-    return redirect(request.GET.get("next", "global_trending"))
+    target = request.GET.get("next")
+
+    if target is None or not url_has_allowed_host_and_scheme(target):
+        target = "global_trending"
+
+    return redirect(target)
