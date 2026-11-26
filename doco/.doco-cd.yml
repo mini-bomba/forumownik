@@ -7,4 +7,5 @@ timeout: 120
 name: forumownik
 working_dir: doco/forumownik
 compose_files: [compose.yaml]
-force_recreate: true
+#force_recreate: true
+force_image_pull: true
