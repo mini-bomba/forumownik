@@ -1,4 +1,5 @@
 from django import forms
+from turnstile.fields import TurnstileField
 
 from ..utils import RestrictedFileField
 
@@ -11,6 +12,7 @@ class CreateThreadForm(forms.Form):
         max_upload_size=5_000_000,
         content_types=["image/gif", "image/jpeg", "image/png", "image/svg+xml", "image/tiff", "image/webp"],
     )
+    captcha = TurnstileField()
 
 
 class CreateCommentForm(forms.Form):
@@ -20,3 +22,4 @@ class CreateCommentForm(forms.Form):
         max_upload_size=5_000_000,
         content_types=["image/gif", "image/jpeg", "image/png", "image/svg+xml", "image/tiff", "image/webp"],
     )
+    captcha = TurnstileField()

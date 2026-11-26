@@ -36,6 +36,10 @@ CSRF_TRUSTED_ORIGINS = [f'https://{os.environ.get("DJANGO_HOST", "localhost")}']
 CSRF_ALLOWED_ORIGINS = [f'https://{os.environ.get("DJANGO_HOST", "localhost")}']
 CORS_ORIGINS_WHITELIST = [f'https://{os.environ.get("DJANGO_HOST", "localhost")}']
 
+# turnstile config
+TURNSTILE_SITEKEY = os.environ.get("TURNSTILE_SITEKEY")
+TURNSTILE_SECRET = os.environ.get("TURNSTILE_SECRET")
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -47,6 +51,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "turnstile",
 ]
 
 MIDDLEWARE = [
