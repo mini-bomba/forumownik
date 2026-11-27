@@ -18,11 +18,13 @@ services:
   valkey:
     image: docker.io/valkey/valkey:9-alpine
     restart: unless-stopped
-    ports:
-      - "6379:6379"
 
   migrate:
     image: ghcr.io/mini-bomba/forumownik:latest
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      REDIS_URL: "redis://valkey:6379"
     entrypoint:
       - /django.sh
       - migrate
