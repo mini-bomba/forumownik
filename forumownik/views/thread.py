@@ -57,13 +57,18 @@ def create_thread(request, category_id: int):
     category = get_object_or_404(c_qs, id=category_id)
 
     if request.method == "GET":
+        form = CreateThreadForm()
+        if request.client_ip_routable:
+            form.fields['captcha'].remote_ip = request.client_ip
         return render(
-            request, "thread_create.html", {"authuser": request.user, "category": category, "form": CreateThreadForm()}
+            request, "thread_create.html", {"authuser": request.user, "category": category, "form": form}
         )
     if request.method != "POST":
         raise BadRequest
 
     form = CreateThreadForm(request.POST, request.FILES)
+    if request.client_ip_routable:
+        form.fields['captcha'].remote_ip = request.client_ip
 
     if not form.is_valid():
         return render(
@@ -90,13 +95,18 @@ def create_root_comment(request, thread_id: int):
     thread = get_object_or_404(thread_qs, id=thread_id)
 
     if request.method == "GET":
+        form = CreateCommentForm()
+        if request.client_ip_routable:
+            form.fields['captcha'].remote_ip = request.client_ip
         return render(
-            request, "thread_reply.html", {"authuser": request.user, "thread": thread, "form": CreateCommentForm()}
+            request, "thread_reply.html", {"authuser": request.user, "thread": thread, "form": form}
         )
     if request.method != "POST":
         raise BadRequest
 
     form = CreateCommentForm(request.POST, request.FILES)
+    if request.client_ip_routable:
+        form.fields['captcha'].remote_ip = request.client_ip
 
     if not form.is_valid():
         return render(request, "thread_reply.html", {"authuser": request.user, "thread": thread, "form": form}, status=400)
@@ -123,15 +133,20 @@ def create_reply_comment(request, thread_id: int, comment_id: int):
     comment = get_object_or_404(qs, id=comment_id, thread_id=thread_id)
 
     if request.method == "GET":
+        form = CreateCommentForm()
+        if request.client_ip_routable:
+            form.fields['captcha'].remote_ip = request.client_ip
         return render(
             request,
             "thread_reply.html",
-            {"authuser": request.user, "thread": comment.thread, "comment": comment, "form": CreateCommentForm()},
+            {"authuser": request.user, "thread": comment.thread, "comment": comment, "form": form},
         )
     if request.method != "POST":
         raise BadRequest
 
     form = CreateCommentForm(request.POST, request.FILES)
+    if request.client_ip_routable:
+        form.fields['captcha'].remote_ip = request.client_ip
 
     if not form.is_valid():
         return render(

@@ -18,11 +18,16 @@ def login(request: HttpRequest) -> HttpResponse:
     if request.user.is_authenticated:
         return redirect("global_trending")
     if request.method == "GET":
-        return render(request, "login.html", {"authuser": request.user, "form": LoginForm()})
+        form = LoginForm()
+        if request.client_ip_routable:
+            form.fields['captcha'].remote_ip = request.client_ip
+        return render(request, "login.html", {"authuser": request.user, "form": form})
     if request.method != "POST":
         raise BadRequest
 
     form = LoginForm(request.POST)
+    if request.client_ip_routable:
+        form.fields['captcha'].remote_ip = request.client_ip
 
     if not form.is_valid():
         return render(request, "login.html", {"authuser": request.user, "form": form}, status=400)
