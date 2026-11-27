@@ -9,4 +9,4 @@ def get_hostname(request):
 
 def get_ip(request):
     # nosemgrep: python.django.security.injection.reflected-data-httpresponse.reflected-data-httpresponse
-    return HttpResponse(request.META.get("REMOTE_ADDR", "unknown"), content_type="text/plain; charset=utf-8")
+    return HttpResponse(request.client_ip or "unknown", content_type="text/plain; charset=utf-8")

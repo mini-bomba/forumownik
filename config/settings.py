@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import json
 import os
 from pathlib import Path
 
@@ -39,6 +40,10 @@ CORS_ORIGINS_WHITELIST = [f'https://{os.environ.get("DJANGO_HOST", "localhost")}
 # turnstile config
 TURNSTILE_SITEKEY = os.environ.get("TURNSTILE_SITEKEY")
 TURNSTILE_SECRET = os.environ.get("TURNSTILE_SECRET")
+
+# ipware
+IPWARE_PROXY_COUNT = int(os.environ.get("PROXY_COUNT", "0"))
+IPWARE_PROXY_IPS = json.loads(os.environ.get("PROXY_IPS", "[]"))
 
 # csp
 
@@ -81,6 +86,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "config.middleware.ClientIPMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
