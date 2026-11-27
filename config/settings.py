@@ -10,11 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
-import json
 import os
 from pathlib import Path
 
 import dotenv
+from csp.constants import NONE, SELF
 
 dotenv.load_dotenv()
 
@@ -40,6 +40,31 @@ CORS_ORIGINS_WHITELIST = [f'https://{os.environ.get("DJANGO_HOST", "localhost")}
 TURNSTILE_SITEKEY = os.environ.get("TURNSTILE_SITEKEY")
 TURNSTILE_SECRET = os.environ.get("TURNSTILE_SECRET")
 
+# csp
+
+CONTENT_SECURITY_POLICY = {
+    "DIRECTIVES": {
+        "child-src": [NONE],
+        "connect-src": [NONE],
+        "default-src": [SELF],
+        "fenced-frame-src": [NONE],
+        "font-src": [NONE],
+        "frame-src": ["https://challenges.cloudflare.com/"],
+        "img-src": [SELF, os.environ.get("S3_ENDPOINT", "https://*.s3.amazonaws.com/")],
+        "manifest-src": [NONE],
+        "media-src": [NONE],
+        "object-src": [NONE],
+        "script-src": [SELF, "https://challenges.cloudflare.com/"],
+        "script-src-elem": [SELF, "https://challenges.cloudflare.com/"],
+        "script-src-attr": [NONE],
+        "style-src": [SELF],
+        "worker-src": [NONE],
+        "sandbox": ["allow-forms", "allow-scripts", "allow-same-origin"],
+        "form-action": [SELF],
+        "frame-ancestors": [NONE],
+    }
+}
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -52,6 +77,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "turnstile",
+    "csp",
 ]
 
 MIDDLEWARE = [
@@ -62,6 +88,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "csp.middleware.CSPMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
