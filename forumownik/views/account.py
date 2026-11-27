@@ -3,6 +3,7 @@ from django.core.exceptions import BadRequest
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.http import url_has_allowed_host_and_scheme
+from django_ratelimit.decorators import ratelimit
 
 from ..forms.account import LoginForm
 
@@ -14,6 +15,8 @@ def logout(request: HttpRequest) -> HttpResponse:
     return redirect("global_trending")
 
 
+@ratelimit(key='ip', rate='5/m', method=ratelimit.UNSAFE)
+@ratelimit(key='post:username', rate='5/m', method=ratelimit.UNSAFE)
 def login(request: HttpRequest) -> HttpResponse:
     if request.user.is_authenticated:
         return redirect("global_trending")

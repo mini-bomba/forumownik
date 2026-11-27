@@ -200,3 +200,12 @@ STORAGES = {
 LOGIN_URL = "account_login"
 LOGIN_REDIRECT_URL = "global_trending"
 LOGOUT_REDIRECT_URL = "global_trending"
+
+# cache
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": os.environ.get("REDIS_URL", "redis://127.0.0.1:6379"),
+    }
+}

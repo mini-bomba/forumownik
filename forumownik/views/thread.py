@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import BadRequest
 from django.db.models import Count, Prefetch, Sum
 from django.shortcuts import get_object_or_404, redirect, render
+from django_ratelimit.decorators import ratelimit
 
 from ..forms.thread import CreateCommentForm, CreateThreadForm
 from ..models import Category, Comment, Thread
@@ -52,6 +53,7 @@ def show_comment(request, thread_id: int, comment_id: int):
 
 
 @login_required
+@ratelimit(group="posts", key="user", rate="1/m", method=ratelimit.UNSAFE)
 def create_thread(request, category_id: int):
     c_qs = Category.objects.annotate(threads=Count("thread"))
     category = get_object_or_404(c_qs, id=category_id)
@@ -59,16 +61,14 @@ def create_thread(request, category_id: int):
     if request.method == "GET":
         form = CreateThreadForm()
         if request.client_ip_routable:
-            form.fields['captcha'].remote_ip = request.client_ip
-        return render(
-            request, "thread_create.html", {"authuser": request.user, "category": category, "form": form}
-        )
+            form.fields["captcha"].remote_ip = request.client_ip
+        return render(request, "thread_create.html", {"authuser": request.user, "category": category, "form": form})
     if request.method != "POST":
         raise BadRequest
 
     form = CreateThreadForm(request.POST, request.FILES)
     if request.client_ip_routable:
-        form.fields['captcha'].remote_ip = request.client_ip
+        form.fields["captcha"].remote_ip = request.client_ip
 
     if not form.is_valid():
         return render(
@@ -88,6 +88,7 @@ def create_thread(request, category_id: int):
 
 
 @login_required
+@ratelimit(group="posts", key="user", rate="1/m", method=ratelimit.UNSAFE)
 def create_root_comment(request, thread_id: int):
     thread_qs = Thread.objects.annotate(
         score=Sum("threadvote__score", default=0), comments=Count("comment")
@@ -97,16 +98,14 @@ def create_root_comment(request, thread_id: int):
     if request.method == "GET":
         form = CreateCommentForm()
         if request.client_ip_routable:
-            form.fields['captcha'].remote_ip = request.client_ip
-        return render(
-            request, "thread_reply.html", {"authuser": request.user, "thread": thread, "form": form}
-        )
+            form.fields["captcha"].remote_ip = request.client_ip
+        return render(request, "thread_reply.html", {"authuser": request.user, "thread": thread, "form": form})
     if request.method != "POST":
         raise BadRequest
 
     form = CreateCommentForm(request.POST, request.FILES)
     if request.client_ip_routable:
-        form.fields['captcha'].remote_ip = request.client_ip
+        form.fields["captcha"].remote_ip = request.client_ip
 
     if not form.is_valid():
         return render(request, "thread_reply.html", {"authuser": request.user, "thread": thread, "form": form}, status=400)
@@ -123,6 +122,7 @@ def create_root_comment(request, thread_id: int):
 
 
 @login_required
+@ratelimit(group="posts", key="user", rate="1/m", method=ratelimit.UNSAFE)
 def create_reply_comment(request, thread_id: int, comment_id: int):
     thread_qs = Thread.objects.annotate(
         score=Sum("threadvote__score", default=0), comments=Count("comment")
@@ -135,7 +135,7 @@ def create_reply_comment(request, thread_id: int, comment_id: int):
     if request.method == "GET":
         form = CreateCommentForm()
         if request.client_ip_routable:
-            form.fields['captcha'].remote_ip = request.client_ip
+            form.fields["captcha"].remote_ip = request.client_ip
         return render(
             request,
             "thread_reply.html",
@@ -146,7 +146,7 @@ def create_reply_comment(request, thread_id: int, comment_id: int):
 
     form = CreateCommentForm(request.POST, request.FILES)
     if request.client_ip_routable:
-        form.fields['captcha'].remote_ip = request.client_ip
+        form.fields["captcha"].remote_ip = request.client_ip
 
     if not form.is_valid():
         return render(
