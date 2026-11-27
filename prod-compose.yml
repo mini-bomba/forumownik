@@ -47,7 +47,7 @@ services:
           "/dev/null",
           "-H",
           "Host: ${DJANGO_HOST}",
-          "http://localhost/hostname",
+          "http://localhost/debug/hostname",
         ]
       interval: 3s
       timeout: 3s
